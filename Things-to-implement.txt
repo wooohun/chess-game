@@ -1,0 +1,7 @@
+IO Dataset Function
+Function to get groundtruth Data
+FUnction to retrive the case Data
+voxelsize
+
+create a method to get the pridiction
+create a function to get a single slice of the function
