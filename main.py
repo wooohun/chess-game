@@ -1,21 +1,21 @@
 import pygame
-# from assets.square import BoardSquare
+# import assets.config as config
+from assets.board import GameBoard
+from assets.config import *
 
-#defining the constant
-WIDTH, HEIGHT = 800, 800
-ROWS, COLS = 8, 8
-SQUARE = WIDTH // COLS
+# WIDTH, HEIGHT = 800, 800
+# ROWS, COLS = 8, 8
+# SQUARE = 100
 
 class Main:
 
     def __init__(self):
         pygame.init() #initializeing the pygame
-        self.screen = pygame.display.set_mode((WIDTH,HEIGHT)) #initializing the display
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT)) #initializing the display
         pygame.display.set_caption('Chess') 
-        self.game = Game() #initialinzing the game class
+        self.game = Game() #initializing the game class
     
     def check_exit(self):
-
         while True:
             self.game.display_board(self.screen) #displaying the chessboard from the game class
         
@@ -29,25 +29,12 @@ class Main:
 class Game: 
 #This class will be used to create the chess board
     def __init__(self):
-        # create board object.
-        # self.board = [[ BoardSquare for j in range(8)] for i in range(8)]
+        self.board = GameBoard()
         pass
+
 
     def display_board(self, surface):
-        for row in range(ROWS):
-            for col in range(COLS):
-                if (row + col) % 2 == 0:
-                    color = (0,0,0)
-                else:
-                    color = (255,255,255)
-
-                dims = (col * SQUARE, row * SQUARE, SQUARE, SQUARE)
-
-                pygame.draw.rect(surface, color, dims)
-    
-    #funstion to display the images under asset folder on display
-    def display_images(self, surface):
-        pass
+        self.board.draw(surface)
 
 main = Main()
 main.check_exit()
