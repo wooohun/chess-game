@@ -15,5 +15,5 @@ class GamePiece:
 
 class Pawn(GamePiece):
     def __init__(self):
-        self.sprite = 
+        # self.sprite = 
         super().__init__(self)
