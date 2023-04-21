@@ -1,5 +1,5 @@
 import pygame
-from assets.square import BoardSquare
+# from assets.square import BoardSquare
 
 #defining the constant
 WIDTH, HEIGHT = 800, 800
@@ -44,6 +44,10 @@ class Game:
                 dims = (col * SQUARE, row * SQUARE, SQUARE, SQUARE)
 
                 pygame.draw.rect(surface, color, dims)
+    
+    #funstion to display the images under asset folder on display
+    def display_images(self, surface):
+        pass
 
 main = Main()
 main.check_exit()
