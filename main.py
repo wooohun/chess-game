@@ -1,4 +1,5 @@
 import pygame
+from assets.square import BoardSquare
 
 #defining the constant
 WIDTH, HEIGHT = 800, 800
@@ -28,6 +29,8 @@ class Main:
 class Game: 
 #This class will be used to create the chess board
     def __init__(self):
+        # create board object.
+        # self.board = [[ BoardSquare for j in range(8)] for i in range(8)]
         pass
 
     def display_board(self, surface):
