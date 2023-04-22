@@ -11,10 +11,6 @@ class knight(GamePiece):
     def __init__(self, type, color, sprite=None):
         super().__init__('Kn', color, sprite)
 
-class Rook(GamePiece):
-    def __init__(self, type, color, sprite=None):
-        super().__init__('R', color, sprite)
-
 class Bishop(GamePiece):
     def __init__(self, type, color, sprite=None):
         super().__init__('B', color, sprite)

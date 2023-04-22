@@ -1,6 +1,11 @@
 from assets.square import BoardSquare
 import assets.utils.config as config
 from assets.gamePieces.pawn import Pawn
+from assets.gamePieces.knight import Knight
+from assets.gamePieces.bishop import Bishop
+from assets.gamePieces.rook import Rook
+from assets.gamePieces.queen import Queen
+from assets.gamePieces.king import King
 
 class GameBoard:
     def __init__(self):
@@ -24,9 +29,13 @@ class GameBoard:
     # create board, want list of rect instead of matrix for pygame.display.update
     def create_board(self):
         board = []
-        for i in range(config.ROWS):
-            for j in range(config.COLS):
-                board.append(BoardSquare(i, j))
+        # constructor for RECT: Rect(left, top, wid, height),
+        # i = left most point of current rect, j = top most point of current rect
+        # construct board w/ black up, white down
+        # make board row by row, meaning for each j, make i in range 8
+        for top in range(config.ROWS):
+            for left in range(config.COLS):
+                board.append(BoardSquare(left, top))
         return board
     
     # setup pieces
@@ -43,6 +52,16 @@ class GameBoard:
                     cur_sq = self.board[(i*8) + j]
                     if piece == 'P':
                         cur_sq.cur_piece = Pawn((i, j), piece, color)
+                    elif piece == 'Kn':
+                        cur_sq.cur_piece = Knight((i, j), piece, color)
+                    elif piece == 'B':
+                        cur_sq.cur_piece = Bishop((i, j), piece, color)
+                    elif piece == 'R':
+                        cur_sq.cur_piece = Rook((i, j), piece, color)
+                    elif piece == 'Q':
+                        cur_sq.cur_piece = Queen((i, j), piece, color)
+                    elif piece == 'K':
+                        cur_sq.cur_piece = King((i, j), piece, color)
         return
     
     def draw(self, screen):

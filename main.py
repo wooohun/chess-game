@@ -3,10 +3,6 @@ import pygame
 from assets.board import GameBoard
 from assets.utils.config import *
 
-# WIDTH, HEIGHT = 800, 800
-# ROWS, COLS = 8, 8
-# SQUARE = 100
-
 class Main:
 
     def __init__(self):
