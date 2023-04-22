@@ -1,11 +1,7 @@
 import pygame
 # import assets.config as config
 from assets.board import GameBoard
-from assets.config import *
-
-# WIDTH, HEIGHT = 800, 800
-# ROWS, COLS = 8, 8
-# SQUARE = 100
+from assets.utils.config import *
 
 class Main:
 
