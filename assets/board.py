@@ -1,5 +1,6 @@
-from . import square
-from . import config
+import square
+import config
+import pieces
 
 class GameBoard:
     def __init__(self):
@@ -8,7 +9,7 @@ class GameBoard:
         # or just write logic to configure from the created board @ self.board
         # 2 (n^2) vs n^2 traversal time, but n is fixed at 8 so time is negligible
         # only consideration is space usage from self.config, also negligible since its set at 8x8 matrix
-        self.config = [
+        self.init = [
             ['bR, bKn, bB, bQ, bK, bB, bKn, bR'],
             ['bP, bP, bP, bP, bP, bP, bP, bP'],
             ['','','','','','','',''],
@@ -19,7 +20,6 @@ class GameBoard:
             ['wR, wKn, wB, wQ, wK, wB, wKn, wR']
         ]
         self.init_board()
-        pass
     
     # create board, want list of rect instead of matrix for pygame.display.update
     def create_board(self):
@@ -32,6 +32,17 @@ class GameBoard:
     # setup pieces
     def init_board(self):
         # traverse through config and board at same time, initialize using pieces classes
+        rows = config.ROWS
+        cols = config.COLS
+        for i in range(rows):
+            for j in range(cols):
+                tile = self.init[i][j]
+                if tile != '':
+                    color = 'white' if cur[0] == 'w' else 'black'
+                    piece = tile[1:]
+                    cur_sq = self.board[(i*8) + j]
+                    if piece == 'P':
+                        cur_sq.cur_piece = pieces.Pawn((i, j), piece, color)
         return
     
     def draw(self, screen):

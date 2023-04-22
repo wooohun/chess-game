@@ -1,5 +1,5 @@
 import pygame
-from . import config
+import config
 
 class BoardSquare:
     def __init__(self, x, y):
