@@ -3,13 +3,12 @@ import pygame
 
 # Game Piece parent class
 class GamePiece:
-    def __init__(self, pos, piece, color):
+    def __init__(self, pos, piece, color, board):
         # type is the type of the piece color is B or W and sprite will be the image
         self.piece = piece
         self.color = color
         self.sprite_path = None
         self.sprite = None
-        # may need to access piece location in future, adding as safety
         self.pos = pos
         self.x = pos[0]
         self.y = pos[1]
@@ -23,6 +22,4 @@ class GamePiece:
         sprite = pygame.image.load(path)
         return pygame.Surface.convert(sprite)
     
-    # move function for piece
-    def move(self, board):
-        pass
+    # 
