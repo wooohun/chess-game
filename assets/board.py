@@ -51,22 +51,22 @@ class GameBoard:
                     piece = tile[1:]
                     cur_sq = self.board[(i*8) + j]
                     if piece == 'P':
-                        cur_sq.cur_piece = Pawn((i, j), piece, color, self)
+                        cur_sq.cur_piece = Pawn((j, i), piece, color, self)
                     elif piece == 'Kn':
-                        cur_sq.cur_piece = Knight((i, j), piece, color)
+                        cur_sq.cur_piece = Knight((j, i), piece, color, self)
                     elif piece == 'B':
-                        cur_sq.cur_piece = Bishop((i, j), piece, color)
+                        cur_sq.cur_piece = Bishop((j, i), piece, color, self)
                     elif piece == 'R':
-                        cur_sq.cur_piece = Rook((i, j), piece, color)
+                        cur_sq.cur_piece = Rook((j, i), piece, color, self)
                     elif piece == 'Q':
-                        cur_sq.cur_piece = Queen((i, j), piece, color)
+                        cur_sq.cur_piece = Queen((j, i), piece, color, self)
                     elif piece == 'K':
-                        cur_sq.cur_piece = King((i, j), piece, color)
+                        cur_sq.cur_piece = King((j, i), piece, color, self)
         return
     
     def get_rect_from_coords(self, coords):
         x, y = coords[0], coords[1]
-        return self.board[(x*8) + y]
+        return self.board[(x*8) + y] if ((x*8) + y) < 64 else None
     
     def draw(self, screen):
         for square in self.board:

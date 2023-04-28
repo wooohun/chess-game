@@ -1,5 +1,8 @@
 from . import gamePiece
 
+# NEED TO IMPLEMENT RULES FOR EN PASSANT
+
+
 class Pawn(gamePiece.GamePiece):
     def __init__(self, pos, piece, color, board):
         #pawns can only move in one direction all other piece can move in any direction they want 
