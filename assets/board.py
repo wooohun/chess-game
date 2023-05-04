@@ -71,4 +71,13 @@ class GameBoard:
     def draw(self, screen):
         for square in self.board:
             square.update(screen)
+
+    # returns True if under attack, false if not
+    def is_in_check(self, color, cur_sq, target_sq):
+        cur_coord, target_coord = cur_sq.coords, target_sq.coords
+        # find king
+        king = [square.cur_piece for square in self.board if square.cur_piece.piece == 'K' and square.cur_piece.color == color]
+
+        
+        return king.under_attack
     

@@ -12,6 +12,9 @@ class GamePiece:
         self.pos = pos
         self.x = pos[0]
         self.y = pos[1]
+        self.under_attack = False
+        self.pinned = True
+        self.has_moved = False
     
     # get sprite path
     def get_sprite(self):
@@ -22,23 +25,29 @@ class GamePiece:
         sprite = pygame.image.load(path)
         return pygame.Surface.convert(sprite)
     
-    def move(self, board):
-        highlighted = self.highlight_moves(board)
-        for square in highlighted:
-            square.highlight = False
-        return
-    
-    # def highlight_moves(self, board):
-    #     res = []
-    #     for square in self.get_moves(board):
-    #         occupant = square.occupying_piece
-    #         if occupant != None:
-    #             if self.color == occupant.color:
-    #                 continue
-    #             else:
-    #                 square.occupying_piece.highlight = True
-    #                 res.append(square)
-    #     return res
+
+    # movement:
+    # square objects dont move
+    # only the pieces within the objects move
+    def move(self, board, t_sq):
+        # reset highlights
+        for sq in board.board:
+            sq.highlight = False
+
+        moves = self.get_moves(board)
+        if t_sq in moves:
+            cur_sq = board.get_rect_from_coords(self.pos)
+            self.pos = t_sq.coords
+            self.x, self.y = self.pos[0], self.pos[1]
+            cur_sq.cur_piece = None
+            t_sq.cur_piece = self
+            self.has_moved = True
+
+            # handle castling
+            # if self.piece == 'K':
+            return True
+        else:
+            return False
     
 
     # FUNCTION WILL BE OVERRIDDEN FOR ONLY THE PAWN SUB-CLASS
@@ -51,16 +60,32 @@ class GamePiece:
     def get_moves(self, board):
         res = []
         for dir in self.get_possible_moves(board):
-            for move in dir:
+            for idx, move in enumerate(dir):
                 target = move.cur_piece
                 if target != None:
                     if target.color != self.color:
-                        move.cur_piece.highlight = True
+                        move.highlight = True
+                        move.cur_piece.under_attack = True
                         res.append(move)
                         break
                     else:
                         break
                 else:
-                    move.cur_piece.highlight = True
+                    move.highlight = True
                     res.append(move)
         return res
+    
+    # determine if piece in attack vector has king behind it
+    def is_pinned(self, vec, idx):
+        last = len(vec) - 1
+        # if current sq is last in attack vector, nothing is "behind" it
+        if idx == last:
+            return
+        cur = vec[idx]
+        next = vec[idx+1]
+        # if square "behind" cur contains king, cur piece is pinned
+        if next.cur_piece.piece == 'K':
+            cur.cur_piece.pinned = True
+        return
+
+
