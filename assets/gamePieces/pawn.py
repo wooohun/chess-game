@@ -1,4 +1,11 @@
 from . import gamePiece
+from . import bishop
+from . import knight
+from . import queen
+from . import rook
+
+# NEED TO IMPLEMENT RULES FOR EN PASSANT
+
 
 class Pawn(gamePiece.GamePiece):
     def __init__(self, pos, piece, color, board):
@@ -7,7 +14,6 @@ class Pawn(gamePiece.GamePiece):
         # self.dir = 'UP' if color == "white" else "Down" 
         self.sprite_path = self.get_sprite()
         self.sprite = self.load_sprite(self.sprite_path)
-        self.has_moved = False
 
     # get all potential forward moves for pawn
     def get_possible_moves(self, board):
@@ -77,5 +83,36 @@ class Pawn(gamePiece.GamePiece):
                 if target.cur_piece != None and target.cur_piece.color == 'white':
                     res.append(target)
         return res
+    
+    # pawn movement
+    def move(self, board, t_sq):
+        for sq in board.board:
+            sq.highlight = False
+
+        moves = self.get_moves(board)
+        if t_sq in moves:
+            cur_sq = board.get_rect_from_coords(self.pos)
+            self.pos = t_sq.coords
+            self.x, self.y = self.pos[0], self.pos[1]
+            cur_sq.cur_piece = None
+            t_sq.cur_piece = self
+            self.has_moved = True
+            # handle promotion
+            if self.y == 7 or self.y == 0:
+                # make promotion selection
+                choice = None
+                if choice == 'B':
+                    t_sq.cur_piece = bishop.Bishop((self.x, self.y), choice, self.color, board)
+                elif choice == 'Kn':
+                    t_sq.cur_piece = knight.Knight((self.x, self.y), choice, self.color, board)
+                elif choice == 'R':
+                    t_sq.cur_piece = rook.Rook((self.x, self.y), choice, self.color, board)
+                elif choice == 'Q':
+                    t_sq.cur_piece = queen.Queen((self.x, self.y), choice, self.color, board)
+            return True
+        else:
+            return False
+            
+
 
     
