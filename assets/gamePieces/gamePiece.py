@@ -9,12 +9,27 @@ class GamePiece:
         self.color = color
         self.sprite_path = None
         self.sprite = None
-        self.pos = pos
+        self._pos = pos
         self.x = pos[0]
         self.y = pos[1]
         self.under_attack = False
         self.pinned = True
         self.has_moved = False
+
+    #######################################################
+    # set instance property decorators for position updates
+
+    # position getter
+    @property
+    def pos(self):
+        return self._pos
+    # position setter
+    @pos.setter
+    def pos(self, coords):
+        self._pos = coords
+        self.x = self.pos[0]
+        self.y = self.pos[1]
+    
     
     # get sprite path
     def get_sprite(self):
@@ -56,7 +71,7 @@ class GamePiece:
     # get valid moves from set of possible moves
     # i.e get moves from vectors until collision happens
     # check if attackable, if able, then add to move set, end vector
-    # else end vectore before possible move
+    # else end vector before possible move
     def get_moves(self, board):
         res = []
         for dir in self.get_possible_moves(board):

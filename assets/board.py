@@ -6,6 +6,7 @@ from assets.gamePieces.bishop import Bishop
 from assets.gamePieces.rook import Rook
 from assets.gamePieces.queen import Queen
 from assets.gamePieces.king import King
+from assets.movement import Mover
 
 class GameBoard:
     def __init__(self):
@@ -25,6 +26,8 @@ class GameBoard:
             ['wR', 'wKn', 'wB', 'wQ', 'wK', 'wB', 'wKn', 'wR']
         ]
         self.init_board()
+        self.mover = Mover()
+        self.turn = 'white'
     
     # create board, want list of rect instead of matrix for pygame.display.update
     def create_board(self):
@@ -33,9 +36,9 @@ class GameBoard:
         # i = left most point of current rect, j = top most point of current rect
         # construct board w/ black up, white down
         # make board row by row, meaning for each j, make i in range 8
-        for top in range(config.ROWS):
-            for left in range(config.COLS):
-                board.append(BoardSquare(left, top))
+        for j in range(config.ROWS):
+            for i in range(config.COLS):
+                board.append(BoardSquare(j, i))
         return board
     
     # setup pieces
@@ -49,7 +52,7 @@ class GameBoard:
                 if tile != '':
                     color = 'white' if tile[0] == 'w' else 'black'
                     piece = tile[1:]
-                    cur_sq = self.board[(i*8) + j]
+                    cur_sq = self.board[(j*8) + i]
                     if piece == 'P':
                         cur_sq.cur_piece = Pawn((j, i), piece, color, self)
                     elif piece == 'Kn':
@@ -70,6 +73,8 @@ class GameBoard:
     
     def draw(self, screen):
         for square in self.board:
+            # if square.cur_piece:
+            #     print(f'Piece: {square.cur_piece}, Piece Coords: {square.cur_piece.pos}, Square Coords: {square.fixed_coords}, Center: {square.square.center}')
             square.update(screen)
 
     # returns True if under attack, false if not
@@ -80,4 +85,33 @@ class GameBoard:
 
         
         return king.under_attack
+    
+    def get_piece_from_coords(self, coords):
+        x, y = coords[0], coords[1]
+        return self.board[8*x + y].cur_piece
+
+    # check if a piece is selected
+    def check_selected(self, x, y):
+        if self.board[8*x + y].cur_piece != None:
+            return True
+        return None
+
+    # return selected piece 
+    def get_piece(self, x, y):
+        return self.board[8*x + y].cur_piece
+
+    # remove the piece from old position
+    def remove_piece(self, x, y):
+        self.board[8*x + y].cur_piece = None
+
+    def update_position(self, x, y, piece):
+        self.board[8*x + y].cur_piece = piece
+    #there is a glitch when we move black piece over the white piece and vice versa
+
+    #place the piece in new position
+
+    # def update_position(self, x, y, piece):
+    #     self.board[8*x + y] = 
+
+        
     

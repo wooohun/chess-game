@@ -12,7 +12,7 @@ class BoardSquare:
         self.set_color = 'dark' if (x + y) % 2 == 0 else 'light'
         self.color = (0, 0, 0) if self.set_color == 'light' else (255, 255, 255)
         # add color for highlighted squares later
-        self.h_color = None
+        self.h_color = (255, 253, 208)
         self.cur_piece = None
         # creates the Rectangle Object 
         self.square = pygame.Rect(
