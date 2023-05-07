@@ -46,6 +46,7 @@ class Queen(gamePiece.GamePiece):
         sw = []
         for i in range(1, min(cur_x, 8-cur_y) + 1):
             target = (cur_x-i, cur_y+i)
+            print(target)
             sw.append(board.get_rect_from_coords(target))
 
         # left
