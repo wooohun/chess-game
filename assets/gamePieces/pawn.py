@@ -15,8 +15,8 @@ class Pawn(gamePiece.GamePiece):
         self.sprite_path = self.get_sprite()
         self.sprite = self.load_sprite(self.sprite_path)
 
-    # get all potential forward moves for pawn
     def get_possible_moves(self, board):
+        """ Get all possible moves for piece, return list of moves"""
         res = []
         # forward movement
         moves = [(0, 1)]
@@ -34,19 +34,8 @@ class Pawn(gamePiece.GamePiece):
                 res.append(board.get_rect_from_coords(target))
         return res
     
-        # # check if pawn is blocked
-    # def is_not_blocked(self, board):
-    #     # front tile 
-    #     front = [0, 1]
-    #     # if white then move up
-    #     if self.color == 'white':
-    #         front[1] = -1
-    #     front_coords = (self.x, self.y + front[1])
-    #     front_tile = board.get_rect_from_coords(front_coords)
-    #     # return True if front is not occupied, False if occupied
-    #     return front_tile.cur_piece == None
-    
     def get_moves(self, board):
+        """ Get set of valid moves from list of possible moves, return list """
         res = []
         # will at most be list of len == 2, less lines of code than is_not_blocked function
         for move in self.get_possible_moves(board):
@@ -61,7 +50,7 @@ class Pawn(gamePiece.GamePiece):
             if self.x + 1 < 8 and self.y - 1 >= 0:
                 right = (self.x + 1, self.y - 1)
                 target = board.get_rect_from_coords(right)
-                if target.cur_piece != None and target.cur_piece.color == 'black':
+                if (target.cur_piece != None) and (target.cur_piece.color == 'black'):
                     res.append(target)
             # left take
             if self.x - 1 >= 0 and self.y - 1 >= 0:
@@ -86,6 +75,7 @@ class Pawn(gamePiece.GamePiece):
     
     # pawn movement
     def move(self, board, t_sq):
+        """Normal Move Logic with Pawn Promotion, return bool"""
         for sq in board.board:
             sq.highlight = False
 
