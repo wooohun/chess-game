@@ -8,6 +8,7 @@ class Rook(gamePiece.GamePiece):
 
     # get all potential forward moves for pawn
     def get_possible_moves(self, board):
+        """ Find all possible moves for rook, return list"""
         res = []
         cur_x, cur_y = self.x, self.y
         
@@ -40,6 +41,16 @@ class Rook(gamePiece.GamePiece):
         res.append(top)
         res.append(bot)
         return res
+    
+    def force_move(self, board, t_sq):
+        """ Force Rook movement for castling, return nothing """
+        cur_sq = board.get_rect_from_coords(self.pos)
+        self.pos = t_sq.coords
+        cur_sq.cur_piece = None
+        t_sq.cur_piece = self
+        self.has_moved = True
+
+
     
                 
 

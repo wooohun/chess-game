@@ -20,12 +20,12 @@ class Bishop(gamePiece.GamePiece):
 
         # north-east
         ne = []
-        for i in range(1, min(8-cur_x, cur_y) + 1):
+        for i in range(1, min(8-cur_x, cur_y)):
             ne.append(board.get_rect_from_coords((cur_x+i, cur_y-i)))
                 
         # south-west
         sw = []
-        for i in range(1, min(cur_x, 8-cur_y) + 1):
+        for i in range(1, min(cur_x, 7-cur_y) + 1):
             sw.append(board.get_rect_from_coords((cur_x-i, cur_y+i)))
 
         # south-east

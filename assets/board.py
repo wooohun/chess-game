@@ -46,25 +46,25 @@ class GameBoard:
         # traverse through config and board at same time, initialize using pieces classes
         rows = config.ROWS
         cols = config.COLS
-        for i in range(rows):
-            for j in range(cols):
-                tile = self.init[i][j]
+        for x in range(rows):
+            for y in range(cols):
+                tile = self.init[y][x]
                 if tile != '':
                     color = 'white' if tile[0] == 'w' else 'black'
                     piece = tile[1:]
-                    cur_sq = self.board[(j*8) + i]
+                    cur_sq = self.board[(x*8) + y]
                     if piece == 'P':
-                        cur_sq.cur_piece = Pawn((j, i), piece, color, self)
+                        cur_sq.cur_piece = Pawn((x, y), piece, color, self)
                     elif piece == 'Kn':
-                        cur_sq.cur_piece = Knight((j, i), piece, color, self)
+                        cur_sq.cur_piece = Knight((x, y), piece, color, self)
                     elif piece == 'B':
-                        cur_sq.cur_piece = Bishop((j, i), piece, color, self)
+                        cur_sq.cur_piece = Bishop((x, y), piece, color, self)
                     elif piece == 'R':
-                        cur_sq.cur_piece = Rook((j, i), piece, color, self)
+                        cur_sq.cur_piece = Rook((x, y), piece, color, self)
                     elif piece == 'Q':
-                        cur_sq.cur_piece = Queen((j, i), piece, color, self)
+                        cur_sq.cur_piece = Queen((x, y), piece, color, self)
                     elif piece == 'K':
-                        cur_sq.cur_piece = King((j, i), piece, color, self)
+                        cur_sq.cur_piece = King((x, y), piece, color, self)
         return
     
     def get_rect_from_coords(self, coords):
@@ -88,7 +88,7 @@ class GameBoard:
     
     def get_piece_from_coords(self, coords):
         x, y = coords[0], coords[1]
-        return self.board[8*x + y].cur_piece
+        return self.board[(8*x) + y].cur_piece
 
     # check if a piece is selected
     def check_selected(self, x, y):
@@ -106,6 +106,13 @@ class GameBoard:
 
     def update_position(self, x, y, piece):
         self.board[8*x + y].cur_piece = piece
+
+    def clear_highlights(self):
+        for sq in self.board:
+            sq.highlight = False
+
+    def show_moves(self, piece):
+        piece.get_moves(self)
     #there is a glitch when we move black piece over the white piece and vice versa
 
     #place the piece in new position

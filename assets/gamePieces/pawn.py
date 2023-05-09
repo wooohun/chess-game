@@ -43,6 +43,7 @@ class Pawn(gamePiece.GamePiece):
             if move.cur_piece != None:
                 break
             else:
+                move.highlight = True
                 res.append(move)
         if self.color == 'white':
             # handle diagonal moves if pieces are there to take
@@ -50,13 +51,15 @@ class Pawn(gamePiece.GamePiece):
             if self.x + 1 < 8 and self.y - 1 >= 0:
                 right = (self.x + 1, self.y - 1)
                 target = board.get_rect_from_coords(right)
-                if (target.cur_piece != None) and (target.cur_piece.color == 'black'):
+                if target.cur_piece != None and target.cur_piece.color == 'black':
+                    target.highlight = True
                     res.append(target)
             # left take
             if self.x - 1 >= 0 and self.y - 1 >= 0:
                 left = (self.x - 1, self.y - 1)
                 target = board.get_rect_from_coords(left)
                 if target.cur_piece != None and target.cur_piece.color == 'black':
+                    target.highlight = True
                     res.append(target)
         elif self.color == 'black':
             # right take
@@ -64,26 +67,24 @@ class Pawn(gamePiece.GamePiece):
                 right = (self.x + 1, self.y - 1)
                 target = board.get_rect_from_coords(right)
                 if target.cur_piece != None and target.cur_piece.color == 'white':
+                    target.highlight = True
                     res.append(target)
             # left take
             if self.x + 1 < 8 and self.y + 1 < 8:
                 left = (self.x - 1, self.y - 1)
                 target = board.get_rect_from_coords(left)
                 if target.cur_piece != None and target.cur_piece.color == 'white':
+                    target.highlight = True
                     res.append(target)
         return res
     
     # pawn movement
     def move(self, board, t_sq):
         """Normal Move Logic with Pawn Promotion, return bool"""
-        for sq in board.board:
-            sq.highlight = False
-
         moves = self.get_moves(board)
         if t_sq in moves:
             cur_sq = board.get_rect_from_coords(self.pos)
             self.pos = t_sq.coords
-            self.x, self.y = self.pos[0], self.pos[1]
             cur_sq.cur_piece = None
             t_sq.cur_piece = self
             self.has_moved = True
