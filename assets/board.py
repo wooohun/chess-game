@@ -83,29 +83,11 @@ class GameBoard:
         # find king
         king = [square.cur_piece for square in self.board if square.cur_piece.piece == 'K' and square.cur_piece.color == color]
 
-        
         return king.under_attack
     
     def get_piece_from_coords(self, coords):
         x, y = coords[0], coords[1]
         return self.board[(8*x) + y].cur_piece
-
-    # check if a piece is selected
-    def check_selected(self, x, y):
-        if self.board[8*x + y].cur_piece != None:
-            return True
-        return None
-
-    # return selected piece 
-    def get_piece(self, x, y):
-        return self.board[8*x + y].cur_piece
-
-    # remove the piece from old position
-    def remove_piece(self, x, y):
-        self.board[8*x + y].cur_piece = None
-
-    def update_position(self, x, y, piece):
-        self.board[8*x + y].cur_piece = piece
 
     def clear_highlights(self):
         for sq in self.board:
@@ -113,12 +95,6 @@ class GameBoard:
 
     def show_moves(self, piece):
         piece.get_moves(self)
-    #there is a glitch when we move black piece over the white piece and vice versa
-
-    #place the piece in new position
-
-    # def update_position(self, x, y, piece):
-    #     self.board[8*x + y] = 
 
         
     
