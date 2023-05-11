@@ -16,7 +16,6 @@ class Main:
         #mover is in game board which is in game class which is in main class
 
         mover = self.game.board.mover
-        got_piece = False #used to move piece
 
         while True:
             self.game.display_board(self.screen) #displaying the chessboard from the game class
@@ -30,6 +29,7 @@ class Main:
                 # if user clicks
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        self.game.board.update_moves()
                         #TODO create a new function to take the position of the mouse and check if it has piece or not then save initial pos if it has piece and move the piece
 
                         # piece = mover.mouse_button_down(event.pos)
@@ -40,13 +40,10 @@ class Main:
 
                         #check if the square has a piece
                         target = self.game.board.get_piece_from_coords((mover.rel_x, mover.rel_y))
-                        # print(f'Target: {target}, Color: {target.color}')
                         if (target != None) and (target.color == self.game.board.turn):
-                            # print('has piece')
-                            # print(type(piece))
                             mover.save_initial(event.pos)
                             mover.move_piece(target)
-                            self.game.board.show_moves(target)
+                            self.game.board.show_highlights(target)
                         else:
                             print('no piece')
                             mover.piece = None

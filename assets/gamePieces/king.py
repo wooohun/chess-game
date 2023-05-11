@@ -46,11 +46,11 @@ class King(gamePiece.GamePiece):
             if rrook != None:
                 if not rrook.has_moved and rrook.piece == 'R':
                     if [board.get_piece_from_coords((i, self.y)) for i in range(5, 7)] == [None, None]:
-                        res.append(board.get_rect_from_coords(self.x + 2, self.y))
+                        res.append(board.get_rect_from_coords((self.x + 2, self.y)))
             #queenside
             if lrook != None:
                 if not lrook.has_moved and lrook.piece == 'R':
                     if [board.get_piece_from_coords((i, self.y)) for i in range(1, self.x)] == [None, None, None]:
-                        res.append(board.get_rect_from_coords(self.x - 2, self.y))
+                        res.append(board.get_rect_from_coords((self.x - 2, self.y)))
         return res
 

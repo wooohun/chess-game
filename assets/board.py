@@ -1,3 +1,4 @@
+from collections import defaultdict
 from assets.square import BoardSquare
 import assets.utils.config as config
 from assets.gamePieces.pawn import Pawn
@@ -25,6 +26,9 @@ class GameBoard:
             ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
             ['wR', 'wKn', 'wB', 'wQ', 'wK', 'wB', 'wKn', 'wR']
         ]
+        # dict of pieces
+        # key: color, value: list of pieces
+        self.pieces = defaultdict(list)
         self.init_board()
         self.mover = Mover()
         self.turn = 'white'
@@ -65,6 +69,8 @@ class GameBoard:
                         cur_sq.cur_piece = Queen((x, y), piece, color, self)
                     elif piece == 'K':
                         cur_sq.cur_piece = King((x, y), piece, color, self)
+                    self.pieces[cur_sq.cur_piece] = cur_sq.cur_piece.get_valid_moves(self)
+                    # self.pieces[color].append(cur_sq.cur_piece) if color == 'white' else self.pieces[color].append(cur_sq.cur_piece)
         return
     
     def get_rect_from_coords(self, coords):
@@ -73,28 +79,46 @@ class GameBoard:
     
     def draw(self, screen):
         for square in self.board:
-            # if square.cur_piece:
-            #     print(f'Piece: {square.cur_piece}, Piece Coords: {square.cur_piece.pos}, Square Coords: {square.fixed_coords}, Center: {square.square.center}')
             square.update(screen)
 
     # returns True if under attack, false if not
-    def is_in_check(self, color, cur_sq, target_sq):
-        cur_coord, target_coord = cur_sq.coords, target_sq.coords
-        # find king
-        king = [square.cur_piece for square in self.board if square.cur_piece.piece == 'K' and square.cur_piece.color == color]
+    def is_in_check(self, cur_sq, t_sq):
+        """ Simulates piece movement to check board state, returns T/F"""
+        res = False
+        cur_piece = cur_sq.cur_piece
+        t_piece = t_sq.cur_piece
 
-        return king.under_attack
+        # simulate movement
+        t_sq.cur_piece = cur_piece
+        cur_sq.cur_piece = t_piece
+
+        # check if currently in check
+        for moves in self.pieces.values():
+            for sq in moves:
+                if sq.cur_piece == 'K':
+                    res = True
+
+        # reset board state
+        t_sq.cur_piece = t_piece
+        cur_sq.cur_piece = cur_piece
+        return res
+
     
     def get_piece_from_coords(self, coords):
         x, y = coords[0], coords[1]
         return self.board[(8*x) + y].cur_piece
+    
+    def update_moves(self):
+        for piece in self.pieces.keys():
+            self.pieces[piece] = piece.get_valid_moves(self)
 
     def clear_highlights(self):
         for sq in self.board:
             sq.highlight = False
-
-    def show_moves(self, piece):
-        piece.get_moves(self)
+            
+    def show_highlights(self, piece):
+        for sq in self.pieces[piece]:
+            sq.highlight = True
 
         
     
