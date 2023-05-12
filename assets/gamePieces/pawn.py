@@ -28,7 +28,6 @@ class Pawn(gamePiece.GamePiece):
 
         for move in moves:
             target = (self.x, self.y + move[1])
-            new_x = target[0]
             new_y = target[1]
             if new_y < 8 and new_y >= 0:
                 res.append(board.get_rect_from_coords(target))
@@ -37,6 +36,7 @@ class Pawn(gamePiece.GamePiece):
     def get_moves(self, board):
         """ Get set of valid moves from list of possible moves, return list """
         res = []
+        print(self.x, self.y)
         # will at most be list of len == 2, less lines of code than is_not_blocked function
         for move in self.get_possible_moves(board):
             # if front square has unit, cant move 1 or 2 squares
@@ -50,7 +50,7 @@ class Pawn(gamePiece.GamePiece):
             if self.x + 1 < 8 and self.y - 1 >= 0:
                 right = (self.x + 1, self.y - 1)
                 target = board.get_rect_from_coords(right)
-                if (target.cur_piece != None) and (target.cur_piece.color == 'black'):
+                if target.cur_piece != None and target.cur_piece.color == 'black':
                     res.append(target)
             # left take
             if self.x - 1 >= 0 and self.y - 1 >= 0:
@@ -60,14 +60,15 @@ class Pawn(gamePiece.GamePiece):
                     res.append(target)
         elif self.color == 'black':
             # right take
-            if self.x - 1 >= 0 and self.y + 1 < 8:
-                right = (self.x + 1, self.y - 1)
+            if self.x + 1 < 8 and self.y + 1 < 8:
+                right = (self.x + 1, self.y + 1)
+                print(f'Black Right: {right}, Coords: {self.pos}, Piece: {self.piece}')
                 target = board.get_rect_from_coords(right)
                 if target.cur_piece != None and target.cur_piece.color == 'white':
                     res.append(target)
             # left take
-            if self.x + 1 < 8 and self.y + 1 < 8:
-                left = (self.x - 1, self.y - 1)
+            if self.x - 1 >= 0 and self.y + 1 < 8:
+                left = (self.x - 1, self.y + 1)
                 target = board.get_rect_from_coords(left)
                 if target.cur_piece != None and target.cur_piece.color == 'white':
                     res.append(target)
@@ -76,14 +77,10 @@ class Pawn(gamePiece.GamePiece):
     # pawn movement
     def move(self, board, t_sq):
         """Normal Move Logic with Pawn Promotion, return bool"""
-        for sq in board.board:
-            sq.highlight = False
-
-        moves = self.get_moves(board)
+        moves = self.get_valid_moves(board)
         if t_sq in moves:
             cur_sq = board.get_rect_from_coords(self.pos)
             self.pos = t_sq.coords
-            self.x, self.y = self.pos[0], self.pos[1]
             cur_sq.cur_piece = None
             t_sq.cur_piece = self
             self.has_moved = True

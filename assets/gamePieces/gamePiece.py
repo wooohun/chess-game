@@ -12,9 +12,9 @@ class GamePiece:
         self._pos = pos
         self.x = pos[0]
         self.y = pos[1]
-        self.under_attack = False
-        self.pinned = True
         self.has_moved = False
+        self.attacking = []
+
 
     #######################################################
     # set instance property decorators for position updates
@@ -41,30 +41,6 @@ class GamePiece:
         return pygame.Surface.convert(sprite)
     
 
-    # movement:
-    # square objects dont move
-    # only the pieces within the objects move
-    def move(self, board, t_sq):
-        # reset highlights
-        for sq in board.board:
-            sq.highlight = False
-
-        moves = self.get_moves(board)
-        if t_sq in moves:
-            cur_sq = board.get_rect_from_coords(self.pos)
-            self.pos = t_sq.coords
-            self.x, self.y = self.pos[0], self.pos[1]
-            cur_sq.cur_piece = None
-            t_sq.cur_piece = self
-            self.has_moved = True
-
-            # handle castling
-            # if self.piece == 'K':
-            return True
-        else:
-            return False
-    
-
     # FUNCTION WILL BE OVERRIDDEN FOR ONLY THE PAWN SUB-CLASS
     # DUE TO ABILITY TO ONLY MOVE ONE SQUARE
 
@@ -75,32 +51,53 @@ class GamePiece:
     def get_moves(self, board):
         res = []
         for dir in self.get_possible_moves(board):
-            for idx, move in enumerate(dir):
+            for move in dir:
                 target = move.cur_piece
                 if target != None:
                     if target.color != self.color:
-                        move.highlight = True
-                        move.cur_piece.under_attack = True
                         res.append(move)
                         break
                     else:
                         break
                 else:
-                    move.highlight = True
                     res.append(move)
         return res
     
-    # determine if piece in attack vector has king behind it
-    def is_pinned(self, vec, idx):
-        last = len(vec) - 1
-        # if current sq is last in attack vector, nothing is "behind" it
-        if idx == last:
-            return
-        cur = vec[idx]
-        next = vec[idx+1]
-        # if square "behind" cur contains king, cur piece is pinned
-        if next.cur_piece.piece == 'K':
-            cur.cur_piece.pinned = True
-        return
+    def get_valid_moves(self, board):
+        """ get moves from board.pieces, return set of valid moves"""
+        res = []
+        cur_sq = board.get_rect_from_coords(self.pos)
+        for t_sq in self.get_moves(board):
+            if not board.is_in_check(cur_sq, t_sq):
+                res.append(t_sq)
+        return res
 
+    # movement:
+    # square objects dont move
+    # only the pieces within the objects move
+    def move(self, board, t_sq):
+        moves = self.get_valid_moves(board)
+        if t_sq in moves:
+            cur_sq = board.get_rect_from_coords(self.pos)
+            self.pos = t_sq.coords
+            cur_sq.cur_piece = None
+            t_sq.cur_piece = self
+            self.has_moved = True
+
+            # handle castling
+            if self.piece == 'K':
+                if cur_sq.x - self.x == 2:
+                    # moving left
+                    target = board.get_rect_from_coords((3, self.y))
+                    rook = board.get_piece_from_coords((0, self.y))
+                    rook.force_move(board, target)
+                elif cur_sq.x - self.x == -2:
+                    # moving right
+                    target = board.get_rect_from_coords((5, self.y))
+                    rook = board.get_piece_from_coords((7, self.y))
+                    rook.force_move(board, target)
+            return True
+        else:
+            return False
+        
 

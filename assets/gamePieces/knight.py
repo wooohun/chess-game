@@ -31,8 +31,8 @@ class Knight(gamePiece.GamePiece):
             (-1, -2)
         ]
 
-        for coord in valid:
-            target = [self.x + coord[0], self.y + coord[1]]
+        for move in valid:
+            target = [self.x + move[0], self.y + move[1]]
 
             # check that target is in board
             if (target[0] >= 0 and target[0] < 8 and target[1] >= 0 and target[1] < 8):

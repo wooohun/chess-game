@@ -69,9 +69,6 @@ class Mover:
         clicked_row = self.mouseY // SQUARE_W
         clicked_col = self.mouseX // SQUARE_H
 
-        print(clicked_row, clicked_col)
-        print(self.mouseX, self.mouseY)
-
         self.piece = self.game.board.get_piece(clicked_row, clicked_col)
 
         return self.piece

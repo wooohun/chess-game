@@ -20,7 +20,7 @@ class Queen(gamePiece.GamePiece):
         
         # north-east
         ne = []
-        for i in range(1, min(8-cur_x, cur_y) + 1):
+        for i in range(1, min(8-cur_x, cur_y)):
             target = (cur_x+i, cur_y-i)
             ne.append(board.get_rect_from_coords(target))
 
@@ -44,9 +44,8 @@ class Queen(gamePiece.GamePiece):
 
         # south-west
         sw = []
-        for i in range(1, min(cur_x, 8-cur_y) + 1):
+        for i in range(1, min(cur_x, 7-cur_y) + 1):
             target = (cur_x-i, cur_y+i)
-            print(target)
             sw.append(board.get_rect_from_coords(target))
 
         # left

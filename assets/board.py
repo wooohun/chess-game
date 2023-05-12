@@ -1,3 +1,4 @@
+from collections import defaultdict
 from assets.square import BoardSquare
 import assets.utils.config as config
 from assets.gamePieces.pawn import Pawn
@@ -25,6 +26,9 @@ class GameBoard:
             ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
             ['wR', 'wKn', 'wB', 'wQ', 'wK', 'wB', 'wKn', 'wR']
         ]
+        # dict of pieces
+        # key: color, value: list of pieces
+        self.pieces = defaultdict(list)
         self.init_board()
         self.mover = Mover()
         self.turn = 'white'
@@ -46,25 +50,27 @@ class GameBoard:
         # traverse through config and board at same time, initialize using pieces classes
         rows = config.ROWS
         cols = config.COLS
-        for i in range(rows):
-            for j in range(cols):
-                tile = self.init[i][j]
+        for x in range(rows):
+            for y in range(cols):
+                tile = self.init[y][x]
                 if tile != '':
                     color = 'white' if tile[0] == 'w' else 'black'
                     piece = tile[1:]
-                    cur_sq = self.board[(j*8) + i]
+                    cur_sq = self.board[(x*8) + y]
                     if piece == 'P':
-                        cur_sq.cur_piece = Pawn((j, i), piece, color, self)
+                        cur_sq.cur_piece = Pawn((x, y), piece, color, self)
                     elif piece == 'Kn':
-                        cur_sq.cur_piece = Knight((j, i), piece, color, self)
+                        cur_sq.cur_piece = Knight((x, y), piece, color, self)
                     elif piece == 'B':
-                        cur_sq.cur_piece = Bishop((j, i), piece, color, self)
+                        cur_sq.cur_piece = Bishop((x, y), piece, color, self)
                     elif piece == 'R':
-                        cur_sq.cur_piece = Rook((j, i), piece, color, self)
+                        cur_sq.cur_piece = Rook((x, y), piece, color, self)
                     elif piece == 'Q':
-                        cur_sq.cur_piece = Queen((j, i), piece, color, self)
+                        cur_sq.cur_piece = Queen((x, y), piece, color, self)
                     elif piece == 'K':
-                        cur_sq.cur_piece = King((j, i), piece, color, self)
+                        cur_sq.cur_piece = King((x, y), piece, color, self)
+                    self.pieces[cur_sq.cur_piece] = cur_sq.cur_piece.get_valid_moves(self)
+                    # self.pieces[color].append(cur_sq.cur_piece) if color == 'white' else self.pieces[color].append(cur_sq.cur_piece)
         return
     
     def get_rect_from_coords(self, coords):
@@ -73,52 +79,47 @@ class GameBoard:
     
     def draw(self, screen):
         for square in self.board:
-            # if square.cur_piece:
-            #     print(f'Piece: {square.cur_piece}, Piece Coords: {square.cur_piece.pos}, Square Coords: {square.fixed_coords}, Center: {square.square.center}')
             square.update(screen)
 
     # returns True if under attack, false if not
-    def is_in_check(self, color, cur_sq, target_sq):
-        cur_coord, target_coord = cur_sq.coords, target_sq.coords
-        # find king
-        king = [square.cur_piece for square in self.board if square.cur_piece.piece == 'K' and square.cur_piece.color == color]
+    def is_in_check(self, cur_sq, t_sq):
+        """ Simulates piece movement to check board state, returns T/F"""
+        res = False
+        cur_piece = cur_sq.cur_piece
+        t_piece = t_sq.cur_piece
 
-        
-        return king.under_attack
+        # simulate movement
+        t_sq.cur_piece = cur_piece
+        cur_sq.cur_piece = t_piece
+
+        # check if currently in check
+        for moves in self.pieces.values():
+            for sq in moves:
+                if sq.cur_piece == 'K':
+                    res = True
+
+        # reset board state
+        t_sq.cur_piece = t_piece
+        cur_sq.cur_piece = cur_piece
+        return res
+
     
     def get_piece_from_coords(self, coords):
         x, y = coords[0], coords[1]
-        return self.board[8*x + y].cur_piece
-
-    #return the name of the current piece from coordinates
-    def get_piece_name(self, coords):
-        x, y = coords[0], coords[1]
-        return self.board[8*x + y].cur_piece.piece
-
-
-    # check if a piece is selected
-    def check_selected(self, x, y):
-        if self.board[8*x + y].cur_piece != None:
-            return True
-        return None
-
-    # return selected piece 
-    def get_piece(self, x, y):
-        return self.board[8*x + y].cur_piece
-
-    # remove the piece from old position
-    def remove_piece(self, x, y):
-        self.board[8*x + y].cur_piece = None
-
-    def update_position(self, x, y, piece):
-        self.board[8*x + y].cur_piece = piece
-    #there is a glitch when we move black piece over the white piece and vice versa
-
-    #place the piece in new position
-
-    # def update_position(self, x, y, piece):
-    #     self.board[8*x + y] = 
+        return self.board[(8*x) + y].cur_piece
     
+    def update_moves(self):
+        for piece in self.pieces.keys():
+            self.pieces[piece] = piece.get_valid_moves(self)
+
+    def clear_highlights(self):
+        for sq in self.board:
+            sq.highlight = False
+            
+    def show_highlights(self, piece):
+        for sq in self.pieces[piece]:
+            sq.highlight = True
+
 
     #change the piece at the coordinates to a queen
     def promote_pawn(self, x, y, color):
