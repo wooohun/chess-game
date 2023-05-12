@@ -120,5 +120,7 @@ class GameBoard:
         for sq in self.pieces[piece]:
             sq.highlight = True
 
-        
-    
+
+    #change the piece at the coordinates to a queen
+    def promote_pawn(self, x, y, color):
+        self.board[8*x + y].cur_piece = Queen((x, y), 'Q', color, self)

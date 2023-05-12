@@ -50,6 +50,7 @@ class Mover:
         self.piece = None
         self.moving = False
 
+
     # def move_piece(self, old_c, old_r, new_c, new_r, piece):
     #     self.piece = piece
     #     self.moving = True
