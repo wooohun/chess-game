@@ -50,6 +50,9 @@ class Main:
                             print('no piece')
                             mover.piece = None
 
+                    
+
+
                 #TODO create a new function for all the mouse button up tasks
                 #if the user releases the mouse
                 elif event.type == pygame.MOUSEBUTTONUP:
@@ -68,6 +71,8 @@ class Main:
                         t_sq = self.game.board.get_rect_from_coords((mover.rel_x, mover.rel_y))
                         print(f'Unclicked At: {event.pos}, Board Indices: {mover.rel_x, mover.rel_y}')     
 
+                        
+                    
                         ### holding piece ###
                         # if piece can move, move
                         if mover.piece.move(self.game.board, t_sq):
@@ -82,7 +87,11 @@ class Main:
                         #         self.game.board.update_position(old_row, old_col, mover.piece)
                         #     self.game.board.update_position(clicked_row, clicked_col, mover.piece)
                         mover.piece = None
+                        
+                        if self.game.board.get_piece_name((mover.rel_x, mover.rel_y)) == 'P':
+                            self.check_promotion(mover.rel_x, mover.rel_y)
 
+                        
 
                 #if the user moves the mouse
                 elif event.type == pygame.MOUSEMOTION:
@@ -92,7 +101,13 @@ class Main:
 
             pygame.display.update() #constantly update the state of the display until the game is exited
 
-
+    def check_promotion(self, row, col):
+        if col == 0:
+            self.game.board.promote_pawn(row, col, color='white')
+            print('promoted')
+        elif col == 7:
+            self.game.board.promote_pawn(row, col, color='black')
+            print('promoted')
 class Game: 
 #This class will be used to create the chess board
     def __init__(self):

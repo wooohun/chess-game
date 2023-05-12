@@ -90,6 +90,12 @@ class GameBoard:
         x, y = coords[0], coords[1]
         return self.board[8*x + y].cur_piece
 
+    #return the name of the current piece from coordinates
+    def get_piece_name(self, coords):
+        x, y = coords[0], coords[1]
+        return self.board[8*x + y].cur_piece.piece
+
+
     # check if a piece is selected
     def check_selected(self, x, y):
         if self.board[8*x + y].cur_piece != None:
@@ -112,6 +118,8 @@ class GameBoard:
 
     # def update_position(self, x, y, piece):
     #     self.board[8*x + y] = 
-
-        
     
+
+    #change the piece at the coordinates to a queen
+    def promote_pawn(self, x, y, color):
+        self.board[8*x + y].cur_piece = Queen((x, y), 'Q', color, self)

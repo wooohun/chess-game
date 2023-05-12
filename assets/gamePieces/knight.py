@@ -36,6 +36,6 @@ class Knight(gamePiece.GamePiece):
 
             # check that target is in board
             if (target[0] >= 0 and target[0] < 8 and target[1] >= 0 and target[1] < 8):
-                res.append(board.get_rect_from_coords(target))
+                res.append([board.get_rect_from_coords(target)])
 
         return res
