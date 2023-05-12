@@ -36,7 +36,6 @@ class Pawn(gamePiece.GamePiece):
     def get_moves(self, board):
         """ Get set of valid moves from list of possible moves, return list """
         res = []
-        print(self.x, self.y)
         # will at most be list of len == 2, less lines of code than is_not_blocked function
         for move in self.get_possible_moves(board):
             # if front square has unit, cant move 1 or 2 squares
@@ -62,7 +61,6 @@ class Pawn(gamePiece.GamePiece):
             # right take
             if self.x + 1 < 8 and self.y + 1 < 8:
                 right = (self.x + 1, self.y + 1)
-                print(f'Black Right: {right}, Coords: {self.pos}, Piece: {self.piece}')
                 target = board.get_rect_from_coords(right)
                 if target.cur_piece != None and target.cur_piece.color == 'white':
                     res.append(target)

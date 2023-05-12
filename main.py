@@ -29,7 +29,6 @@ class Main:
                 # if user clicks
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.game.board.update_moves()
                         #TODO create a new function to take the position of the mouse and check if it has piece or not then save initial pos if it has piece and move the piece
 
                         # piece = mover.mouse_button_down(event.pos)
@@ -69,6 +68,7 @@ class Main:
                         if mover.piece.move(self.game.board, t_sq):
                             # update turn
                             self.game.board.turn = 'white' if self.game.board.turn == 'black' else 'black'
+                            self.game.board.update_moves()
                         mover.piece = None
 
                         # clear highlights

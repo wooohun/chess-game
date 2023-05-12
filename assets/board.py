@@ -70,7 +70,6 @@ class GameBoard:
                     elif piece == 'K':
                         cur_sq.cur_piece = King((x, y), piece, color, self)
                     self.pieces[cur_sq.cur_piece] = cur_sq.cur_piece.get_valid_moves(self)
-                    # self.pieces[color].append(cur_sq.cur_piece) if color == 'white' else self.pieces[color].append(cur_sq.cur_piece)
         return
     
     def get_rect_from_coords(self, coords):
@@ -89,13 +88,14 @@ class GameBoard:
         t_piece = t_sq.cur_piece
 
         # simulate movement
+        # cur_sq.cur_piece = cur_piece
         t_sq.cur_piece = cur_piece
-        cur_sq.cur_piece = t_piece
+        cur_sq.cur_piece = None
 
         # check if currently in check
-        for moves in self.pieces.values():
-            for sq in moves:
-                if sq.cur_piece == 'K':
+        for piece in self.pieces.keys():
+            for sq in piece.get_moves(self):
+                if sq.cur_piece != None and sq.cur_piece.piece == 'K':
                     res = True
 
         # reset board state
