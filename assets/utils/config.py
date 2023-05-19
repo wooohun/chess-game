@@ -1,8 +1,10 @@
 # Global Variables
 
 # Board Dimensions
+SCREEN_WIDTH = 1000
 WIDTH = 800
 HEIGHT = 800
+GUI_WIDTH = SCREEN_WIDTH - WIDTH
 
 ROWS = 8
 COLS = 8

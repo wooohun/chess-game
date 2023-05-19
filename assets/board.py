@@ -26,12 +26,12 @@ class GameBoard:
             ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
             ['wR', 'wKn', 'wB', 'wQ', 'wK', 'wB', 'wKn', 'wR']
         ]
+        self.turn = 'white'
         # dict of pieces
-        # key: color, value: list of pieces
+        # key: piece
         self.pieces = defaultdict(list)
         self.init_board()
         self.mover = Mover()
-        self.turn = 'white'
     
     # create board, want list of rect instead of matrix for pygame.display.update
     def create_board(self):
@@ -70,7 +70,6 @@ class GameBoard:
                     elif piece == 'K':
                         cur_sq.cur_piece = King((x, y), piece, color, self)
                     self.pieces[cur_sq.cur_piece] = cur_sq.cur_piece.get_valid_moves(self)
-                    # self.pieces[color].append(cur_sq.cur_piece) if color == 'white' else self.pieces[color].append(cur_sq.cur_piece)
         return
     
     def get_rect_from_coords(self, coords):
@@ -89,19 +88,29 @@ class GameBoard:
         t_piece = t_sq.cur_piece
 
         # simulate movement
+        # cur_sq.cur_piece = cur_piece
         t_sq.cur_piece = cur_piece
-        cur_sq.cur_piece = t_piece
+        cur_sq.cur_piece = None
 
         # check if currently in check
-        for moves in self.pieces.values():
-            for sq in moves:
-                if sq.cur_piece == 'K':
-                    res = True
+        for piece in self.pieces.keys():
+            if piece.color != self.turn:
+                for sq in piece.get_moves(self):
+                    if sq.cur_piece != None and sq.cur_piece.piece == 'K':
+                        res = True
 
         # reset board state
         t_sq.cur_piece = t_piece
         cur_sq.cur_piece = cur_piece
         return res
+    
+    def is_in_checkmate(self):
+        for piece, moves in self.pieces.items():
+            for move in moves:
+                if move.cur_piece == 'K' and move.cur_piece.color == self.turn:
+                    if len(moves) == 0:
+                        return True
+        return False
 
     
     def get_piece_from_coords(self, coords):

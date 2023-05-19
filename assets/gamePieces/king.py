@@ -29,7 +29,7 @@ class King(gamePiece.GamePiece):
                 res.append([board.get_rect_from_coords(target)])
         # get castling moves
         for move in self.can_castle(board):
-            res.append(move)
+            res.append([move])
         return res
     
 

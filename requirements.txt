@@ -1,2 +1,4 @@
 install pygame module
     -> pip install pygame
+install pygame_gui module
+    -> pip install pygame_gui

@@ -13,7 +13,6 @@ class GamePiece:
         self.x = pos[0]
         self.y = pos[1]
         self.has_moved = False
-        self.attacking = []
 
 
     #######################################################
@@ -49,6 +48,7 @@ class GamePiece:
     # check if attackable, if able, then add to move set, end vector
     # else end vector before possible move
     def get_moves(self, board):
+        """ Targetable set of moves from all possible, returns List"""
         res = []
         for dir in self.get_possible_moves(board):
             for move in dir:
@@ -76,6 +76,7 @@ class GamePiece:
     # square objects dont move
     # only the pieces within the objects move
     def move(self, board, t_sq):
+        """Move Piece, Return bool if successful"""
         moves = self.get_valid_moves(board)
         if t_sq in moves:
             cur_sq = board.get_rect_from_coords(self.pos)

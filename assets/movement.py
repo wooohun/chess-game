@@ -49,6 +49,11 @@ class Mover:
     def unmove_piece(self):
         self.piece = None
         self.moving = False
+    
+    def is_targeting_board(self):
+        if self.mouseX <= 800 and self.mouseY <= 800:
+            return True
+        return False
 
 
     # def move_piece(self, old_c, old_r, new_c, new_r, piece):
