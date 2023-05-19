@@ -49,9 +49,4 @@ class Rook(gamePiece.GamePiece):
         cur_sq.cur_piece = None
         t_sq.cur_piece = self
         self.has_moved = True
-
-
-    
-                
-
         

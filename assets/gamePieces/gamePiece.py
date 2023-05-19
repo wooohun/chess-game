@@ -13,7 +13,6 @@ class GamePiece:
         self.x = pos[0]
         self.y = pos[1]
         self.has_moved = False
-        self.attacking = []
 
 
     #######################################################

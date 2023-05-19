@@ -37,5 +37,3 @@ class BoardSquare:
             cur_rect = self.cur_piece.sprite.get_rect()
             cur_rect.center = self.square.center
             surface.blit(self.cur_piece.sprite, cur_rect)
-
-    
